@@ -20,7 +20,7 @@ def parse_tle_file(content: bytes):
 
 def get_tle_data(noradid: str, show_progress: bool):
     """Get TLE data for a specific NORAD ID."""
-    repo = git.Repo(".", odbt=git.GitDB)
+    repo = git.Repo(".")
     commits = reversed(list(repo.iter_commits(branch_name, paths=[relative_path])))
     progress_bar = None
     if show_progress:
