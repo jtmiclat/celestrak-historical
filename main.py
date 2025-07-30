@@ -7,14 +7,16 @@ relative_path = "raw-data/tle-data.txt"
 branch_name = "main"
 show_progress = True  # Set to False to disable progress bar
 
+
 def parse_tle_file(content: bytes):
     """Parse TLE file content and yield lines."""
-    lines = content.decode('utf-8').strip().splitlines()
+    lines = content.decode("utf-8").strip().splitlines()
     tles = {}
     for tle in batched(lines, 3):
         norad_id = tle[2].split()[1]
-        tles[norad_id] = '\n'.join(tle).strip()
+        tles[norad_id] = "\n".join(tle).strip()
     return tles
+
 
 def get_tle_data(noradid: str, show_progress: bool):
     """Get TLE data for a specific NORAD ID."""
@@ -34,10 +36,11 @@ def get_tle_data(noradid: str, show_progress: bool):
         except KeyError:
             continue
 
+
 @click.command()
-@click.option('--output', default="-",  help='Path to the file in the')
-@click.option('--norad-id', required=True, help='NORAD ID of the satellite')
-@click.option('--progress-bar/--no-progress-bar', default=True)
+@click.option("--output", default="-", help="Path to the file in the")
+@click.option("--norad-id", required=True, help="NORAD ID of the satellite")
+@click.option("--progress-bar/--no-progress-bar", default=True)
 def main(output: str, norad_id: str, progress_bar: bool):
     info = get_tle_data(norad_id, show_progress=progress_bar)
     dedup = set()
@@ -52,8 +55,9 @@ def main(output: str, norad_id: str, progress_bar: bool):
         click.echo("\n")
         click.echo(json.dumps(results, indent=2))
     else:
-        with open(output, 'w') as f:
+        with open(output, "w") as f:
             json.dump(results, f, indent=2)
+
 
 if __name__ == "__main__":
     main()
