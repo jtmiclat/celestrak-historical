@@ -1,8 +1,13 @@
 # celestrak-historical
 
-A historical celestrak data pulled using https://github.com/githubocto/flat. Pulled every 6hrs starting July 30, 2025
+Historical celestrak data pulled and saved to git using https://github.com/githubocto/flat.
 
-Inspired from https://www.keiruaprod.fr/blog/2021/05/23/automated-history-of-celestrak-satellite-data.html
+Pulled every 6 hrs starting July 30, 2025
+
+Inspired from the following
+
+- https://www.keiruaprod.fr/blog/2021/05/23/automated-history-of-celestrak-satellite-data.html
+- https://github.com/simonw/git-history
 
 ## Fetching historical data
 
@@ -21,3 +26,6 @@ uv run main.py --noradid=$NORADID --output=example.json
 #   }
 # ]
 ```
+
+## License
+MIT for the code

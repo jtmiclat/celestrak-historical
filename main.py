@@ -2,7 +2,6 @@ import click
 import json
 import git
 from itertools import batched
-import pprint
 
 relative_path = "raw-data/tle-data.txt"
 branch_name = "main"
@@ -17,10 +16,11 @@ def parse_tle_file(content: bytes):
         tles[norad_id] = '\n'.join(tle).strip()
     return tles
 
-def get_tle_data(noradid):
+def get_tle_data(noradid: str, show_progress: bool):
     """Get TLE data for a specific NORAD ID."""
     repo = git.Repo(".", odbt=git.GitDB)
     commits = reversed(list(repo.iter_commits(branch_name, paths=[relative_path])))
+    progress_bar = None
     if show_progress:
         progress_bar = click.progressbar(commits, show_pos=True, show_percent=True)
     for commit in commits:
@@ -36,9 +36,10 @@ def get_tle_data(noradid):
 
 @click.command()
 @click.option('--output', default="-",  help='Path to the file in the')
-@click.option('--noradid', required=True, help='NORAD ID of the satellite')
-def main(output, noradid):
-    info = get_tle_data(noradid)
+@click.option('--norad-id', required=True, help='NORAD ID of the satellite')
+@click.option('--progress-bar/--no-progress-bar', default=True)
+def main(output: str, norad_id: str, progress_bar: bool):
+    info = get_tle_data(norad_id, show_progress=progress_bar)
     dedup = set()
     results = []
     for date, sha, tle in info:
@@ -53,6 +54,6 @@ def main(output, noradid):
     else:
         with open(output, 'w') as f:
             json.dump(results, f, indent=2)
-        
+
 if __name__ == "__main__":
     main()
