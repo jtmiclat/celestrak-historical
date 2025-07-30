@@ -7,8 +7,6 @@ requires-python = ">=3.13"
 dependencies = [
     "click>=8.2.1",
     "gitpython>=3.1.45",
-    "pyorbital>=1.10.2",
-    "skyfield>=1.53",
 ]
 
 [dependency-groups]
