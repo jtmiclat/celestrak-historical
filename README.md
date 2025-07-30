@@ -27,5 +27,11 @@ uv run main.py --noradid=$NORADID --output=example.json
 # ]
 ```
 
+Getting the latest
+
+```bash
+uv run main.py --norad-id $NORADID --no-progress-bar | jq -r '.[0].tle'
+```
+
 ## License
 MIT for the code
