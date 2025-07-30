@@ -1,6 +1,6 @@
 # celestrak-historical
 
-A historical flat of celestrak data. Pulled every 3hrs startin July 30, 2025
+A historical celestrak data pulled using https://github.com/githubocto/flat. Pulled every 6hrs starting July 30, 2025
 
 Inspired from https://www.keiruaprod.fr/blog/2021/05/23/automated-history-of-celestrak-satellite-data.html
 
