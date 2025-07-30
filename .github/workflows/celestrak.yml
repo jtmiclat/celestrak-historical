@@ -1,17 +1,22 @@
 name: Fetch Celestrak data
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 */6 * * *' # Run this workflow at 8:12am and 8:12 pm every day
 
 jobs:
   scheduled:
     runs-on: ubuntu-latest
-    steps: # 
+    steps: 
+      - name: Setup deno
+        uses: denoland/setup-deno@main
+        with:
+          deno-version: v1.10.x
       - name: Check out repo
         uses: actions/checkout@v2
       - name: Fetch data 
-        uses: githubocto/flat@v2
+        uses: githubocto/flat@v3
         with:
-          http_url: https://celestrak.com/NORAD/elements/active.txt
+          http_url: https://celestrak.org/NORAD/elements/gp.php?GROUP=active&FORMAT=tle
           downloaded_filename: active.txt
