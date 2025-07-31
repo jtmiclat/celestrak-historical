@@ -8,6 +8,7 @@ dependencies = [
     "click>=8.2.1",
     "click-datetime>=0.4.0",
     "gitpython>=3.1.45",
+    "pytz>=2025.2",
 ]
 
 [dependency-groups]

@@ -6,6 +6,7 @@ import git
 from itertools import batched
 from collections.abc import Mapping, Iterator
 from datetime import datetime
+from pytz import utc
 
 relative_path = "raw-data/tle-data.txt"
 branch_name = "main"
@@ -35,12 +36,12 @@ def get_tle_data(
     if show_progress:
         progress_bar = click.progressbar(commits, show_pos=True, show_percent=True)
     for commit in commits:
-        if start and commit.committed_datetime < start:
-            continue
-        if end and commit.committed_datetime > end:
-            continue
         if progress_bar:
             progress_bar.update(1)
+        if start and commit.committed_datetime < start.replace(tzinfo=utc):
+            continue
+        if end and commit.committed_datetime > end.replace(tzinfo=utc):
+            continue
         try:
             content = commit.tree[relative_path].data_stream.read()
             tles = parse_tle_file(content)
