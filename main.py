@@ -2,14 +2,16 @@ import click
 import json
 import git
 from itertools import batched
+from collections.abc import Mapping, Iterator
+from datetime import datetime
 
 relative_path = "raw-data/tle-data.txt"
 branch_name = "main"
 show_progress = True  # Set to False to disable progress bar
 
 
-def parse_tle_file(content: bytes):
-    """Parse TLE file content and yield lines."""
+def parse_tle_file(content: bytes) -> Mapping[str, str]:
+    """Parse TLE file content Returns a dict with norad_id as key and tle itself as value."""
     lines = content.decode("utf-8").strip().splitlines()
     tles = {}
     for tle in batched(lines, 3):
@@ -18,7 +20,9 @@ def parse_tle_file(content: bytes):
     return tles
 
 
-def get_tle_data(noradid: str, show_progress: bool):
+def get_tle_data(
+    noradid: str, show_progress: bool
+) -> Iterator[tuple[datetime, str, str]]:
     """Get TLE data for a specific NORAD ID."""
     repo = git.Repo(".")
     commits = reversed(list(repo.iter_commits(branch_name, paths=[relative_path])))
