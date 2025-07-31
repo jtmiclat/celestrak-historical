@@ -3,7 +3,7 @@ name: Fetch Celestrak data
 on:
   workflow_dispatch:
   schedule:
-    - cron: '27 */6 * * *'  # run every 6 hours at 27 minutes. 27 minutes is used as an offset
+    - cron: '27 */12 * * *'  # run every 12 hours at 27 minutes. 27 minutes is used as an offset
 
 jobs:
   scheduled:

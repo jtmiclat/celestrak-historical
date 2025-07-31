@@ -1,4 +1,6 @@
 import click
+from click_datetime import Datetime
+
 import json
 import git
 from itertools import batched
@@ -21,7 +23,10 @@ def parse_tle_file(content: bytes) -> Mapping[str, str]:
 
 
 def get_tle_data(
-    noradid: str, show_progress: bool
+    noradid: str,
+    show_progress: bool,
+    start: datetime | None = None,
+    end: datetime | None = None,
 ) -> Iterator[tuple[datetime, str, str]]:
     """Get TLE data for a specific NORAD ID."""
     repo = git.Repo(".")
@@ -30,6 +35,10 @@ def get_tle_data(
     if show_progress:
         progress_bar = click.progressbar(commits, show_pos=True, show_percent=True)
     for commit in commits:
+        if start and commit.committed_datetime < start:
+            continue
+        if end and commit.committed_datetime > end:
+            continue
         if progress_bar:
             progress_bar.update(1)
         try:
@@ -43,10 +52,28 @@ def get_tle_data(
 
 @click.command()
 @click.option("--output", default="-", help="Path to the file in the")
+@click.option(
+    "--start",
+    type=Datetime(format="%Y-%m-%d"),
+    default=None,
+    help="Filter results from this onwards. Example: 2025-08-01",
+)
+@click.option(
+    "--end",
+    type=Datetime(format="%Y-%m-%d"),
+    default=None,
+    help="Filter results to this date. Example: 2025-08-01",
+)
 @click.option("--norad-id", required=True, help="NORAD ID of the satellite")
 @click.option("--progress-bar/--no-progress-bar", default=True)
-def main(output: str, norad_id: str, progress_bar: bool):
-    info = get_tle_data(norad_id, show_progress=progress_bar)
+def main(
+    output: str,
+    start: datetime | None,
+    end: datetime | None,
+    norad_id: str,
+    progress_bar: bool,
+):
+    info = get_tle_data(norad_id, show_progress=progress_bar, start=start, end=end)
     dedup = set()
     results = []
     for date, sha, tle in info:

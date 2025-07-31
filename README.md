@@ -2,7 +2,7 @@
 
 Historical celestrak data pulled and saved to git using https://github.com/githubocto/flat.
 
-Pulled every 6 hrs starting July 30, 2025
+Pulled every 12 hrs starting July 30, 2025
 
 Inspired from the following
 
@@ -34,4 +34,5 @@ uv run main.py --norad-id $NORADID --no-progress-bar | jq -r '.[0].tle'
 ```
 
 ## License
+
 MIT for the code
