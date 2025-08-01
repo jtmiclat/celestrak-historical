@@ -9,13 +9,20 @@ Inspired from the following
 - https://www.keiruaprod.fr/blog/2021/05/23/automated-history-of-celestrak-satellite-data.html
 - https://github.com/simonw/git-history
 
-## Fetching historical data
+## Usage
+
+**Clone the data**
 
 ```bash
 git clone git@github.com:jtmiclat/celestrak-historical.git
 git pull
 git checkout origin/main
-uv run main.py --noradid=$NORADID --output=example.json
+```
+
+**Getting all data**
+
+```bash
+uv run main.py --norad-id=$NORADID
 
 # Example
 # [
@@ -27,10 +34,16 @@ uv run main.py --noradid=$NORADID --output=example.json
 # ]
 ```
 
-Getting the latest
+**Getting all latest**
 
 ```bash
 uv run main.py --norad-id $NORADID --no-progress-bar | jq -r '.[0].tle'
+```
+
+**Fetching for certain ranges**
+
+```bash
+uv run main.py --start 2025-07-31 --end 2025-07-01 --norad-id $NORADID --no-progress-bar | jq -r '.[0].tle'
 ```
 
 ## License
